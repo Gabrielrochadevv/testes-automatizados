@@ -15,6 +15,11 @@ jobs:
         with:
           java-version: '22'
           distribution: 'adopt'
+
+      - name: Start API container
+        run: docker run -d --name api-entregas -p 8080:8080 api-entregas-image
+         sleep 15  # espera alguns segundos para o servidor iniciar
+
       - name: Build and test
         run: mvn clean test #Esse comando vai rodar os testes
   deploy:
@@ -26,3 +31,5 @@ jobs:
         run: |
           echo "Deploying application..."
           # Adicione aqui seu comando de deploy
+          
+          
