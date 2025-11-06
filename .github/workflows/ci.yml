@@ -1,28 +1,45 @@
 name: Continuous Integration
+
 on:
-  pull_request:  # Aciona para pull requests
-  push:          # Aciona para pushs
+  pull_request:
+  push:
     branches:
-      - '*'  # Isso significa qualquer branch
+      - '*'  # Roda em qualquer branch
+
 jobs:
   continuous-integration:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '22'
           distribution: 'temurin'
-      - name: Build and test
-        run: mvn clean test #Esse comando vai rodar os testes
+
+      # Etapa 1: compila e empacota a aplicação
+      - name: Build application
+        run: mvn clean package -DskipTests
+
+      # Etapa 2: inicia a API em background (usando o jar recém-gerado)
+      - name: Start API
+        run: |
+          nohup java -jar target/*.jar > server.log 2>&1 &
+          sleep 10  # espera o servidor subir
+
+      # Etapa 3: executa os testes (que agora conseguem conectar)
+      - name: Run tests
+        run: mvn test
+
   deploy:
     runs-on: ubuntu-latest
-    needs: continuous-integration  # Esse job depende do anterior
-    if: success()  # Esse job só será executado se o job anterior for bem-sucedido
+    needs: continuous-integration
+    if: success()
     steps:
       - name: Deploy application
         run: |
           echo "Deploying application..."
-          # Adicione aqui seu comando de deploy
+          # Adicione aqui o comando real de deploy
