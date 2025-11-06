@@ -25,23 +25,20 @@ import static io.restassured.RestAssured.given;
 
 public class CadastroEntregasService {
 
-    //jsonSchema
-    String schemasPath = "src/test/resources/schemas/";
-    JSONObject jsonSchema;
-    private final ObjectMapper mapper = new ObjectMapper();
-
-    //recuperação do iD
-    private String idDelivery;
-
     final EntregaModel entregaModel = new EntregaModel();
-
     public final Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .create();
 
     public Response response;
-
     String baseUrl = "http://localhost:8080";
+    //recuperação do iD
+    String idDelivery;
+    //jsonSchema
+    String schemasPath = "src/test/resources/schemas/";
+    JSONObject jsonSchema;
+    private final ObjectMapper mapper = new ObjectMapper();
+
 
     /* setFieldsDelivery -> ajustas campos do objeto entregaModel */
     public void setFieldsDelivery(String field, String value) {
@@ -104,6 +101,7 @@ public class CadastroEntregasService {
 
     //validateResponseAgainstSchema
     public Set<ValidationMessage> validateResponseAgainstSchema() throws IOException {
+
         JSONObject jsonResponse = new JSONObject(response.getBody().asString());
 
         JsonSchemaFactory schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
