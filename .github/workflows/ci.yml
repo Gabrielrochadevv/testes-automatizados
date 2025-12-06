@@ -13,7 +13,7 @@ jobs:
 
     services:
       entregas:
-        image: gabrielrochadevv/api-entregas:latest
+        image: gabrielrochadevv/api-entregass:latest
         ports:
           - 8080:8080
         options: >-
