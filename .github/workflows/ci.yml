@@ -10,17 +10,14 @@ jobs:
   continuous-integration:
     runs-on: ubuntu-latest
 
-
     services:
       entregas:
-        image: gabrielrochadevv/api-entregass:latest
-        ports:
-          - 8080:8080
+        image: gabrielrochadevv/api-entregas:latest   #
         options: >-
           --health-cmd="curl --fail http://localhost:8080/actuator/health || exit 1"
           --health-interval=5s
           --health-timeout=3s
-          --health-retries=20
+          --health-retries=30
 
     steps:
       - name: Checkout code
@@ -34,9 +31,9 @@ jobs:
 
       - name: Wait for ms-entregas to be ready
         run: |
-          echo " Aguardando o serviço ms-entregas subir..."
+          echo "Aguardando o serviço subir..."
           for i in {1..30}; do
-            curl -s http://localhost:8080/actuator/health && break
+            curl -s http://entregas:8080/actuator/health && break   # <-- ALTERADO
             sleep 2
           done
 
@@ -47,6 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: continuous-integration
     if: success()
+
     steps:
       - name: Deploy application
         run: echo "Deploying application..."
