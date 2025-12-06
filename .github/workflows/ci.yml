@@ -10,6 +10,7 @@ jobs:
   continuous-integration:
     runs-on: ubuntu-latest
 
+
     services:
       entregas:
         image: gabrielrochadevv/api-entregas:latest
